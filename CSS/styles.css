@@ -1,0 +1,12 @@
+/* Site-Wide Styles */
+
+
+header {
+    display: flex;
+    align-items: center;
+    background-color: #20cc62;
+    color: #424b54;
+}
+body {
+    background-color: #157a6e;
+}
