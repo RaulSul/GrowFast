@@ -1,0 +1,4 @@
+rootProject.name = 'growfast'
+
+include 'backend'
+include 'frontend'
