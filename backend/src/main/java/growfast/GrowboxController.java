@@ -26,7 +26,7 @@ public class GrowboxController
         this.assembler = assembler;
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     Resources<Resource<Growbox>> all()
     {
         List<Resource<Growbox>> resources =
@@ -50,7 +50,7 @@ public class GrowboxController
         return assembler.toResource(box);
     }
 
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> create(@RequestBody Growbox newBox) throws URISyntaxException
     {
         Resource<Growbox> resource = assembler.toResource(repository.save(newBox));

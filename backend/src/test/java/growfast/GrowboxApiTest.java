@@ -10,7 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,7 +33,7 @@ public class GrowboxApiTest
     private final String ENDPOINT = "/growboxes/";
 
 
-    private void fillRepositoryWith4Growboxes()
+    private void fillRepositoryWith4Items()
     {
         repository.save(new Growbox("Box A"));
         repository.save(new Growbox("Box B"));
@@ -46,62 +48,106 @@ public class GrowboxApiTest
     }
 
     @Test
-    public void getAllGrowboxesFromEmptyRepoShouldReturnOk() throws Exception
+    public void getAllFromEmptyRepo() throws Exception
     {
         this.mockMvc
                 .perform(get(ENDPOINT))
                 .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void getAllGrowboxesFromEmptyRepoShouldReturnJson() throws Exception
-    {
-        this.mockMvc
-                .perform(get(ENDPOINT))
-                .andDo(print())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8));
-    }
-
-    @Test
-    public void getAllGrowboxesFromEmptyRepoShouldReturnNoItems() throws Exception
-    {
-        this.mockMvc
-                .perform(get(ENDPOINT))
-                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$._embedded.growboxList").doesNotExist());
     }
 
     @Test
-    public void getAllGrowboxesShouldReturnOk() throws Exception
+    public void getAll() throws Exception
     {
-        fillRepositoryWith4Growboxes();
+        fillRepositoryWith4Items();
 
         this.mockMvc
                 .perform(get(ENDPOINT))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$._embedded.growboxList", hasSize(4)));
     }
 
     @Test
-    public void getAllGrowboxesShouldReturnJson() throws Exception
+    public void getOneNonExistingItem() throws Exception
     {
-        fillRepositoryWith4Growboxes();
-
         this.mockMvc
-                .perform(get(ENDPOINT))
+                .perform(get(ENDPOINT + "/1"))
                 .andDo(print())
-                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8));
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    public void getAllGrowboxesShouldReturnInstances() throws Exception
+    public void getOne() throws Exception
     {
-        fillRepositoryWith4Growboxes();
+        String id = repository.save(new Growbox("Box Z")).getId();
+
+        this.mockMvc
+                .perform(get(ENDPOINT + "/" + id))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.name").value("Box Z"))
+                .andExpect(jsonPath("$.sensors").isEmpty());
+    }
+
+    @Test
+    public void postOne() throws Exception
+    {
+        String box = "{\"name\": \"Box Z\", \"sensors\": []}";
+
+        this.mockMvc
+                .perform(post(ENDPOINT)
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(box))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.name").value("Box Z"))
+                .andExpect(jsonPath("$.sensors").isArray())
+                .andExpect(jsonPath("$.sensors").isEmpty());
+    }
+
+    @Test
+    public void postOneWithNoSensors() throws Exception
+    {
+        String box = "{\"name\": \"Box Z\"}";
+
+        this.mockMvc
+                .perform(post(ENDPOINT)
+                        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(box))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.name").value("Box Z"))
+                .andExpect(jsonPath("$.sensors").isArray())
+                .andExpect(jsonPath("$.sensors").isEmpty());
+    }
+
+    @Test
+    public void deleteOne() throws Exception
+    {
+        String id = repository.save(new Growbox("Box Z")).getId();
+
+        fillRepositoryWith4Items();
+
+        this.mockMvc
+                .perform(delete(ENDPOINT + "/" + id))
+                .andDo(print())
+                .andExpect(status().isNoContent());
 
         this.mockMvc
                 .perform(get(ENDPOINT))
                 .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$._embedded.growboxList", hasSize(4)));
     }
 }

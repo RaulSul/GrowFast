@@ -8,13 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 public class Growbox
 {
     @Id
     private String id;
     private String name;
     private List<Sensor> sensors;
+
+    public Growbox()
+    {
+        this("");
+    }
 
     public Growbox(String name)
     {
