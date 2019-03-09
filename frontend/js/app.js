@@ -7,7 +7,7 @@ const app = new Vue({
         firstName: 'Raul',
         lastName: 'S',
         email: '',
-        message: 'Welcome to GrowFast 1.0!'
+        message: 'GrowFast 1.0: A new era of room-scale farming'
 
 
     },

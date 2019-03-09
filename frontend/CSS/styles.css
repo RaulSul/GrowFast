@@ -6,7 +6,85 @@ header {
     align-items: center;
     background-color: #20cc62;
     color: #424b54;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    padding: 10px 5px;
+    font-family: ff-enzo-web, sans-serif;
+
 }
+
 body {
+    margin: 0;
+}
+
+.background-image {
+    background-image: url(../misc/pics/johannes-hofmann-536077-unsplash.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    min-height: 100%;
+    min-width: 1024px;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.logo {
+    border-radius: 15px;
+    margin: 5px 10px;
+}
+
+.general-text {
+    width: 1200px;
+    margin: 20px auto;
+}
+
+.blog-image {
+    border-radius: 10px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+#welcome-box {
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 500px;
+    margin: 0 auto;
     background-color: #157a6e;
+    top: 150px;
+    z-index: 1;
+}
+
+.side {
+    position: absolute;
+    top: 50%;
+
+}
+.side a {
+    color: white;
+    font-size: 22px;
+    display: block;
+    width: 130px;
+    padding: 12px;
+    text-decoration: none;
+    margin: 8px 0;
+    border-radius: 6px;
+    margin-left: -100px;
+    transition: 0.6s all;
+}
+
+.side a:hover {
+    margin-left: 0;
 }

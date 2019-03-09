@@ -13,8 +13,6 @@
 
             <script src="./js/app.js" defer></script>
 
-
-
         </head>
         <body>
             <header>
@@ -23,7 +21,26 @@
             </header>
 
             <div id="app">
-                {{ message }}
+
+                <div class="background-image"></div>
+
+                    <div id="welcome-box">
+                        <h2 class="welcome">{{ message }}</h2>
+                    </div>
+
+                    <div class="general-text">
+                        <img class="blog-image" src="./misc/pics/founders.jpg" alt="The Great Founders of GrowFast" />
+                    </div>
+
+                    <div class="side">
+                        <a href="#" style="background: #20cc62;">Home</a>
+                        <a href="https://github.com/tapioqwerty/GrowFast" style="background: #157a6e;" target="_blank">GitHub</a>
+                        <a href="#" style="background: #a31621;">GrowBoxes</a>
+                        <a href="#" style="background: #1e3888;">Contact</a>
+                    </div>
+
+
+
             </div>
 
             <script>
