@@ -14,6 +14,7 @@ class GrowboxResourceAssembler implements ResourceAssembler<Growbox, Resource<Gr
     {
         Resource<Growbox> resource = new Resource<>(box,
                 linkTo(methodOn(GrowboxController.class).one(box.getId())).withSelfRel(),
+                linkTo(methodOn(GrowboxController.class).sensors(box.getId())).withRel("sensors"),
                 linkTo(methodOn(GrowboxController.class).all()).withRel("growboxes"));
 
         return resource;
